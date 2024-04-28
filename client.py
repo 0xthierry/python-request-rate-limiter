@@ -32,6 +32,8 @@ async def fetcher(session: aiohttp.ClientSession, url, retries=5):
               print(f"Rate limit hit. Retrying after {retry_delay} seconds...")
               await asyncio.sleep(retry_delay)
               return await fetcher(session, url, retries - 1)
+            else:
+              raise Exception("Rate limit hit. No retries left.")
 
         async with session.get(url) as response:
             data = await response.json()
